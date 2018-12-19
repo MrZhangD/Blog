@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 与Spring整合使用的配置文件 -->
+<configuration>
+	<!-- LOG4J日志配置 可以保证在控制台正常打印出SQL语句-->
+	<settings>
+       <setting name="logImpl" value="LOG4J" /> 
+	</settings>
+    
+    <!--配置别名
+		type是实体类的完整类名
+		alias是类的别名
+	-->
+	<typeAliases>
+		<!-- 这种配置，可以在Mapper.xml映射文件中使用配置好的别名，如在StaffMapper.xml中的resultType="Staff"即表示
+			resultType="pers.springmybatis.vo.Staff"
+		-->
+		<!-- <typeAlias type="pers.zhangdi.blog.vo.Article" alias="Article"/> -->
+		<!-- 直接输入包名，表示的是可以直接在Mapper.xml中使用类名，如同上述一致 -->
+		<package name="pers.zhangdi.blog.vo"/>
+	</typeAliases>
+	
+ </configuration>

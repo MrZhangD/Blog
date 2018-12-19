@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.zhangdi.blog.dao.AboutMapper">
+	<select id="doFind" resultType="About">
+		select * from about
+	</select>
+	<update id="doUpdate" parameterType="About">
+		update about set img=#{img},name=#{name},work=#{work},abtext=#{abtext},content=#{content},abblog=#{abblog}
+	</update>
+</mapper>

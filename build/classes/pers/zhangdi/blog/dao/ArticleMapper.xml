@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.zhangdi.blog.dao.ArticleMapper">
+	<!-- 添加文章 -->
+	<insert id="doAdd" parameterType="Article" >
+		insert into article values(#{title},#{introduce},#{content},#{img},#{subject},#{time},#{reading},#{likes},#{id})
+	</insert>
+	
+	<!-- 删除文章 -->
+	<delete id="doDelete" parameterType="string">
+		delete from article where id=#{id}
+	</delete>
+	
+	<!-- 更新文章 -->
+	<update id="doUpdate" parameterType="Article">
+		update article set title=#{title},introduce=#{introduce},content=#{content},
+		img=#{img},subject=#{subject},time=#{time},reading=#{reading},likes=#{likes} where id=#{id}
+	</update>
+	
+	<!-- 根据title查询文章 -->
+	<select id="doFindByTitle" parameterType="string" resultType="Article">
+		select * from article where title=#{title}
+	</select>
+	
+	<!-- 根据id查询文章 -->
+	<select id="doFindById" parameterType="string" resultType="Article">
+		select * from article where id=#{id}
+	</select>
+	
+	<!-- 根据时间查询文章 -->
+	<select id="doFindByTime" parameterType="string" resultType="Article">
+		select * from article where time = #{time}
+	</select>
+	
+	<!-- 根据文章类型查询文章 -->
+ 	<select id="doFindBySubject" parameterType="string" resultType="Article">
+		<if test='_parameter == "学无止境"'>
+			select * from article where SUBJECT='前端知识' OR SUBJECT='心得笔记' OR SUBJECT='后台研发' OR SUBJECT='其他知识'
+		</if>
+		<if test='_parameter == "生活点滴"'>
+			select * from article where SUBJECT='生活日记' OR SUBJECT='学会欣赏' OR SUBJECT='程序人生'
+		</if>
+		<if test='_parameter != "生活点滴" and _parameter != "学无止境"'>
+			select * from article where subject = #{subject}
+		</if>
+	</select>
+	
+	<!-- 查询全部文章 -->
+	<select id="doFindAll" resultType="Article">
+		select * from article
+	</select>
+	
+	<!-- 按照时间顺序查询文章 -->		
+	<select id="doFindAllOrderByTime" resultType="Article"> 
+		select * from article ORDER BY time DESC
+	</select>
+	
+	<!-- 根据时间顺序查询文章并且分页查询（一页10条） -->
+	<select id="doFindOrderByTimeAndByPage" parameterType="int" resultType="Article" >
+		select * from article ORDER BY time DESC LIMIT #{page},10
+	</select>
+	
+	<!-- 按照阅读量查询 -->
+	<select id="doFindAllOrderByRead" resultType="Article">
+		select * from article ORDER BY reading desc
+	</select>
+	
+	<!-- 按点赞量查询 -->
+	<select id="doFindAllOrderByLike" resultType="Article">
+		select * from article ORDER BY likes desc
+	</select>
+	
+	<!-- 查询当前文章的上一张和下一张 -->
+	<select id="doFindIds" parameterType="string" resultType="Article">
+		SELECT * FROM article WHERE id IN(SELECT CASE WHEN SIGN(id-#{id})&gt;0 THEN MIN(id) 
+		WHEN SIGN(id-#{id})&lt;0 THEN MAX(id) ELSE id END  FROM article WHERE id !=#{id}
+		GROUP BY SIGN(id-#{id}) ORDER BY SIGN(id-#{id})) ORDER BY id
+	</select>
+	
+	<!-- 根据题目关键字或文章内容的关键字查询文章(注意模糊查询的语句) -->
+	<select id="doFindLikeKeyword" parameterType="string" resultType="Article">
+		SELECT * FROM article WHERE title LIKE "%"#{keyword}"%" OR content LIKE "%"#{keyword}"%"
+	</select>
+	
+	<!-- 根据题目和文章类型两者查询文章 -->
+	<select id="doFindLikeSome"  resultType="Article">
+		SELECT * FROM article
+		<where>
+			<if test='_parameter.get("0") != null and _parameter.get("0") != ""'>
+				title LIKE "%"#{0}"%"
+			</if>
+			<if test=' _parameter.get("1") != "" and _parameter.get("1") != null'>
+				and subject like "%"#{1}"%"
+			</if>
+		</where>
+		ORDER BY id+0 desc
+	</select>
+	
+</mapper>

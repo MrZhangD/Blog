@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.zhangdi.blog.dao.GenreMapper">
+	<select id="doFindGenre" parameterType="string" resultType="string">
+		select genre from genre where subject=#{subject}
+	</select>
+	<select id="doFindSubject" parameterType="string" resultType="string">
+		select subject from genre where genre=#{genre}
+	</select>
+	<select id="doFindId" parameterType="string" resultType="string">
+		select id from genre where genre=#{genre}
+	</select>
+</mapper>
